@@ -6,7 +6,19 @@ export default new (class ArticleControllers {
         articleservice.find(req, res);
     }
 
-    findById(req: Request, res: Response){
-        articleservice.findById(req, res);
+    findOne(req: Request, res: Response){
+        articleservice.findOne(req, res);
+    }    
+    
+    create(req: Request, res: Response){
+        articleservice.create(req, res);
+    }
+
+    update(req: Request, res: Response){
+        articleservice.update(req, res);
+    }
+
+    delete(req: Request, res: Response){
+        articleservice.delete(req, res);
     }
 })();

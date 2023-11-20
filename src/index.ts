@@ -12,11 +12,18 @@ AppDataSource.initialize()
         const  port = 5000
 
         app.use(express.json())
-        app.use(cors())    
         app.use("/api/v1", articleRoute)
         app.use("/api/v1", paslonRoute)
         app.use("/api/v1", partaiRoute)
-        app.use("/api/v1", voterRoute)    
+        app.use("/api/v1", voterRoute)
+        
+        const options:cors.CorsOptions = {
+            methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
+            origin: "*",
+            preflightContinue: false,
+            optionsSuccessStatus: 204
+        }
+        app.use(cors(options))
 
         app.listen(port, ()=> `App listening on port ${port}`)
     })
