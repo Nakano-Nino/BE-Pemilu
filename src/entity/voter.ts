@@ -9,21 +9,13 @@ export class voter {
     id: number
 
     @Column()
-    fullName: string
-
-    @Column()
-    address: string
-
-    @Column()
-    gender: string
-
-    @Column()
-    paslon: string
-
+    userId: number
     @OneToOne(() => user)
     @JoinColumn()
     User: user
     
+    @Column()
+    paslonId: number
     @ManyToOne(() => paslon, (Paslon) => Paslon.Voter, {
         onUpdate: "CASCADE",
         onDelete: "CASCADE"

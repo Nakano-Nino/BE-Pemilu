@@ -33,7 +33,8 @@ export default new class userServices {
                 address: data.address,
                 gender: data.gender,
                 username: data.username,
-                password: hashedPassword
+                password: hashedPassword,
+                role: 'user'
             })
 
             await this.UserRepository.save(obj)
@@ -52,7 +53,7 @@ export default new class userServices {
 
             const usernameCheck = await this.UserRepository.findOne({
                 where: {username: data.username},
-                select: ["id", "fullName", "address", "gender", "username", "password"]
+                select: ["id", "fullName", "address", "gender", "username", "password", "role"]
             })
             if (!usernameCheck) {
                 return res.status(404).json({ message: "User not found " })

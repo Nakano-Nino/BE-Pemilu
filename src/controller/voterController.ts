@@ -6,19 +6,16 @@ export default new (class VoterControllers {
         voterService.find(req, res);
     }
 
-    findOne(req: Request, res: Response){
-        voterService.findOne(req, res);
-    }    
-    
     vote(req: Request, res: Response){
         voterService.vote(req, res);
     }
-
-    update(req: Request, res: Response){
-        voterService.update(req, res);
-    }
-
-    delete(req: Request, res: Response){
-        voterService.delete(req, res);
-    }
+    
+    // findOne(req: Request, res: Response){
+    //     voterService.findOne(req, res);
+    // }
+    
+    // count(req: Request, res: Response){
+    //     voterService.count(req, res);
+    // }
+    
 })();

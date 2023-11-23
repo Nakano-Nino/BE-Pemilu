@@ -12,8 +12,22 @@ export default new class PaslonServices {
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const fetchedData = await this.paslonRepository.find({relations: ['Partai']});
-            return res.status(200).json(fetchedData);
+            const fetchedData = await this.paslonRepository.find({relations: ['Partai'] });
+
+            const listPaslon = fetchedData.map((paslon) => {
+                return{
+                    orderNum: paslon.orderNum,
+                    image: paslon.image,
+                    vissionMission: paslon.VissionMission,
+                    coalition: paslon.Partai.map((partai) => {
+                        return{
+                            name: partai.name
+                        }
+                    })
+                }
+            })
+
+            return res.status(200).json(listPaslon);
         } catch (error) {
             return res.status(500).json({ Error: "error while finding datas" })
         }
