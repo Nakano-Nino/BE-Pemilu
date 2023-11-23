@@ -2,10 +2,13 @@ import { Repository } from "typeorm";
 import { Request, Response } from "express";
 import { AppDataSource } from "../data-source";
 import { voter } from "../entity/voter";
-import * as bcrypt from "bcrypt"
+import { user } from "../entity/user";
+import { paslon } from "../entity/paslon";
 
 export default new class voterServices {
     private readonly voterRepository: Repository<voter> = AppDataSource.getRepository(voter)
+    private readonly UserRepository: Repository<user> = AppDataSource.getRepository(user)
+    private readonly PaslonRepository: Repository<paslon> = AppDataSource.getRepository(paslon)
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
@@ -20,24 +23,44 @@ export default new class voterServices {
         try {
             const voterId = req.params.id
 
-            const fetchedData = await this.voterRepository.findOneBy({ id: Number(voterId) })
+            const fetchedData = await this.voterRepository.findOne({ where: {id: Number(voterId)}, relations: ['Paslon', 'User'] })
             return res.status(200).json(fetchedData)
         } catch (error) {
             return res.status(500).json({ Error: error })
         }
     }
 
-    async create(req: Request, res: Response): Promise<Response> {
+    async vote(req: Request, res: Response): Promise<Response> {
         try {
-            const data = req.body
-            const hashedPassword = await bcrypt.hash(data.password, 10)
+            const loginSession = res.locals.loginSession
+
+            const UserId = loginSession.user.id
+            const user = await this.UserRepository.findOne({
+                where: { id: UserId }
+            })
+
+            const { orderNum } = req.body
+            const paslon = await this.PaslonRepository.findOne({ where: {orderNum: orderNum }})
+
+            console.log(paslon);
+            
+
+            const data = {
+                fullName: user.fullName,
+                address: user.address,
+                gender: user.gender,
+                paslonName: paslon.name,
+                paslonId: paslon.id
+            }
 
             const obj = this.voterRepository.create({
                 fullName: data.fullName,
                 address: data.address,
                 gender: data.gender,
-                username: data.username,
-                password: hashedPassword
+                paslon: data.paslonName,
+                User: UserId,
+                Paslon: paslon
+
             })
             
             await this.voterRepository.save(obj)
@@ -58,8 +81,8 @@ export default new class voterServices {
                 fullName: data.fullName,
                 address: data.address,
                 gender: data.gender,
-                username: data.username,
-                password: data.password
+                paslon: data.paslon,
+                User: data.UserId
             })
 
             this.voterRepository.merge(fetchedData, obj)
@@ -76,24 +99,6 @@ export default new class voterServices {
 
             const results = await this.voterRepository.delete(voterId)
             return res.status(200).json(results)
-        } catch (error) {
-            return res.status(500).json({ Error: error })
-        }
-    }
-
-    async login(req: Request, res: Response): Promise<Response> {
-        try {
-            const data = req.body
-            
-            const user = await this.voterRepository.findOneBy({ username: data.username })
-
-            bcrypt.compare(data.password, user.password, (err, result) => {
-                if(!result){
-                    return res.status(401).json({ message: "Password is wrong" })
-                }else {
-                    return res.status(200).json(user)
-                }
-            })
         } catch (error) {
             return res.status(500).json({ Error: error })
         }

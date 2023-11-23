@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToOne } from "typeorm"
+import { paslon } from "./paslon"
 
 @Entity()
 export class partai {
@@ -20,4 +21,10 @@ export class partai {
 
     @Column()
     image: String
+
+    @ManyToOne(() => paslon, (Paslon) => Paslon.Partai, {
+        onUpdate: "CASCADE",
+        onDelete: "CASCADE"
+    })
+    Paslon: paslon
 }

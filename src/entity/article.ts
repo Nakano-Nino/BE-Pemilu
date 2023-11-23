@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm"
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany, ManyToOne } from "typeorm"
+import { user } from "./user"
 
 @Entity()
 export class artikel {
@@ -14,4 +15,16 @@ export class artikel {
 
     @Column()
     image: String
+
+    @Column()
+    author: String
+
+    @Column()
+    createdAt: Date
+
+    @ManyToOne(() => user, (User) => User.article, {
+        onDelete: "CASCADE",
+        onUpdate: "CASCADE"
+    })
+    User: user
 }

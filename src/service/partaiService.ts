@@ -46,7 +46,8 @@ export default new class partaiServices {
                 ketum: data.ketum,
                 vissionMission: data.vissionMission,
                 address: data.address,
-                image: imageUrl
+                image: imageUrl,
+                Paslon: data.PaslonId
             })
 
             await this.partaiRepository.save(obj)
@@ -80,7 +81,8 @@ export default new class partaiServices {
                 ketum: data.ketum,
                 vissionMission: data.vissionMission,
                 address: data.address,
-                image: imageUrl
+                image: imageUrl,
+                Paslon: data.PaslonId
             })
 
             this.partaiRepository.merge(fetchedData, obj)

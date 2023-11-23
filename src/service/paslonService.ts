@@ -12,7 +12,7 @@ export default new class PaslonServices {
 
     async find(req: Request, res: Response): Promise<Response> {
         try {
-            const fetchedData = await this.paslonRepository.find({});
+            const fetchedData = await this.paslonRepository.find({relations: ['Partai']});
             return res.status(200).json(fetchedData);
         } catch (error) {
             return res.status(500).json({ Error: "error while finding datas" })
@@ -21,9 +21,9 @@ export default new class PaslonServices {
 
     async findOne(req: Request, res: Response): Promise<Response> {
         try {
-            const userId = req.params.id
+            const userId = parseInt(req.params.id)
 
-            const fetchedData = await this.paslonRepository.findOneBy({ id: Number(userId) })
+            const fetchedData = await this.paslonRepository.findOne({ where: {id: userId}, relations: ['Partai']})
             return res.status(200).json(fetchedData)
         } catch (error) {
             return res.status(500).json({ Error: error })
@@ -49,7 +49,7 @@ export default new class PaslonServices {
                 name: data.name,
                 orderNum: data.orderNum,
                 VissionMission: data.VissionMission,
-                image: imageUrl
+                image: imageUrl,
             })
             
             await this.paslonRepository.save(obj)

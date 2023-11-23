@@ -10,8 +10,8 @@ export default new (class VoterControllers {
         voterService.findOne(req, res);
     }    
     
-    create(req: Request, res: Response){
-        voterService.create(req, res);
+    vote(req: Request, res: Response){
+        voterService.vote(req, res);
     }
 
     update(req: Request, res: Response){
@@ -20,8 +20,5 @@ export default new (class VoterControllers {
 
     delete(req: Request, res: Response){
         voterService.delete(req, res);
-    }
-    login(req: Request, res: Response){
-        voterService.login(req, res);
     }
 })();

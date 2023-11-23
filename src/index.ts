@@ -4,6 +4,7 @@ import articleRoute from "./route/articleRouter"
 import paslonRoute from "./route/paslonRouter"
 import partaiRoute from "./route/partaiRouter"
 import voterRoute from "./route/voterRouter"
+import userRoute from "./route/userRouter"
 import * as cors from "cors"
 
 AppDataSource.initialize()
@@ -16,6 +17,7 @@ AppDataSource.initialize()
         app.use("/api/v1", paslonRoute)
         app.use("/api/v1", partaiRoute)
         app.use("/api/v1", voterRoute)
+        app.use("/api/v1", userRoute)
         
         const options:cors.CorsOptions = {
             methods: "GET,HEAD,OPTIONS,PUT,PATCH,POST,DELETE",
