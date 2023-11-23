@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import * as jwt from "jsonwebtoken"
+require('dotenv').config()
 
 export default new class AuthMiddlewares {
     Authentification(req: Request, res: Response, next: NextFunction){
         try {
             const authHeader = req.headers.authorization
-            const secretKey = "secret"
+            const secretKey = process.env.SECRET_KEY
 
             if(!authHeader || !authHeader.startsWith("Bearer")) {
                 return res.status(401).json({ error: "Unauthorized" })
