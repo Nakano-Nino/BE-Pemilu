@@ -37,11 +37,11 @@ export default new class voterServices {
 
             const data  = req.body
             const paslon = await this.PaslonRepository.findOne({where: {orderNum: data.orderNum}})
-        
-            const obj = new voter()
-            obj.userId = UserId
-            obj.paslonId = paslon.id
             
+            const obj = this.voterRepository.create({
+                userId: UserId,
+                paslonId: paslon.id,
+            })
             await this.voterRepository.save(obj)
             return res.status(200).json(obj)
         } catch (error) {

@@ -69,7 +69,7 @@ export default new class userServices {
                 fullName: usernameCheck.fullName,
             })
 
-            const token = await jwt.sign({user}, "secret", {expiresIn: "1d"})
+            const token = await jwt.sign({user}, "secret", {expiresIn: "20m"})
             return res.status(200).json({token, user})
 
         } catch (error) {

@@ -24,6 +24,7 @@ export default new class ArticleServices {
             const id = req.params.id
 
             const fetchedData = await this.articleRepository.findOne({ where: {id: Number(id)}, relations: ['User'] });
+
             return res.status(200).json(fetchedData)
         } catch (error) {
             return res.status(500).json({ Error: "error while finding data" })
