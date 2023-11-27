@@ -36,6 +36,12 @@ export default new class voterServices {
             const UserId = loginSession.user.id
 
             const data  = req.body
+
+            const checkVote = await this.voterRepository.findOne({ where: {userId: UserId}})
+            if(checkVote) {
+                return res.status(400).json({ message: "User Already Vote" })
+            }
+
             const paslon = await this.PaslonRepository.findOne({where: {orderNum: data.orderNum}})
             
             const obj = this.voterRepository.create({
@@ -48,62 +54,4 @@ export default new class voterServices {
             return res.status(500).json({ Error: "Error while creating data" })
         }
     }
-    
-    // async count(req: Request, res: Response): Promise<Response> {
-    //     try {
-    //         const countedData = await this.voterRepository.findAndCount({})
-
-    //         console.log(Number(countedData));
-            
-    //         return res.status(200).json(countedData)
-    //     } catch (error) {
-    //         return res.status(500).json({ Error: "error while counting datas" })
-    //     }
-    // }
-
-    // async findOne(req: Request, res: Response): Promise<Response> {
-    //     try {
-    //         const voterId = req.params.id
-
-    //         const fetchedData = await this.voterRepository.findOne({ where: {id: Number(voterId)}, relations: ['Paslon', 'User'] })
-
-    //         return res.status(200).json(fetchedData)
-    //     } catch (error) {
-    //         return res.status(500).json({ Error: error })
-    //     }
-    // }
-
-    // async update(req: Request, res: Response): Promise<Response> {
-    //     try {
-    //         const voterId = req.params.id
-    //         const data = req.body
-
-    //         const fetchedData = await this.voterRepository.findOneBy({ id: Number(voterId) });
-
-    //         const obj = this.voterRepository.create({
-    //             fullName: data.fullName,
-    //             address: data.address,
-    //             gender: data.gender,
-    //             paslon: data.paslon,
-    //             User: data.UserId
-    //         })
-
-    //         this.voterRepository.merge(fetchedData, obj)
-    //         const results = await this.voterRepository.save(fetchedData)
-    //         return res.status(200).json(results)
-    //     } catch (error) {
-    //         return res.status(500).json({ Error: error })
-    //     }
-    // }
-
-    // async delete(req: Request, res: Response): Promise<Response> {
-    //     try {
-    //         const voterId = req.params.id
-
-    //         const results = await this.voterRepository.delete(voterId)
-    //         return res.status(200).json(results)
-    //     } catch (error) {
-    //         return res.status(500).json({ Error: error })
-    //     }
-    // }
 }

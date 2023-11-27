@@ -31,6 +31,13 @@ export default new class partaiServices {
 
     async create(req: Request, res: Response): Promise<Response> {
         try {
+            const role = res.locals.loginSession.user.role
+            
+            if(role == "user"){
+                res.status(403).json({ message: "Forbidden" })
+                return
+            }
+
             const data = req.body
             const uploaded = req.file.path
             let imageUrl: string = ''
@@ -59,6 +66,13 @@ export default new class partaiServices {
 
     async update(req: Request, res: Response): Promise<Response> {
         try {
+            const role = res.locals.loginSession.user.role
+            
+            if(role == "user"){
+                res.status(403).json({ message: "Forbidden" })
+                return
+            }
+
             const partaiId = req.params.id
             const data = req.body
             const uploaded = req.file.path
@@ -95,6 +109,13 @@ export default new class partaiServices {
 
     async delete(req: Request, res: Response): Promise<Response> {
         try {
+            const role = res.locals.loginSession.user.role
+            
+            if(role == "user"){
+                res.status(403).json({ message: "Forbidden" })
+                return
+            }
+
             const partaiId = req.params.id
 
             const fetchedData = await this.partaiRepository.findOneBy({ id: Number(partaiId) })

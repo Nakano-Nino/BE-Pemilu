@@ -37,8 +37,8 @@ export default new class userServices {
                 role: 'user'
             })
 
-            await this.UserRepository.save(obj)
-            return res.status(200).json(obj)
+            const result = await this.UserRepository.save(obj)
+            return res.status(200).json({ message: "Register Successfull" , result })
         } catch (error) {
             return res.status(500).json({ Error: error })
         }
@@ -51,10 +51,7 @@ export default new class userServices {
             const { error } = loginSchema.validate(data)
             if (error) return res.status(400).json({ Error: error })
 
-            const usernameCheck = await this.UserRepository.findOne({
-                where: {username: data.username},
-                select: ["id", "fullName", "address", "gender", "username", "password", "role"]
-            })
+            const usernameCheck = await this.UserRepository.findOne({where: {username: data.username}})
             if (!usernameCheck) {
                 return res.status(404).json({ message: "User not found " })
             }
@@ -64,13 +61,14 @@ export default new class userServices {
                 return res.status(400).json({ message: "Password is wrong" })
             }
 
-            const user = await this.UserRepository.create({
+            const user = this.UserRepository.create({
                 id: usernameCheck.id,
                 fullName: usernameCheck.fullName,
+                role: usernameCheck.role
             })
 
-            const token = await jwt.sign({user}, "secret", {expiresIn: "20m"})
-            return res.status(200).json({token, user})
+            const token = jwt.sign({user}, "secret", {expiresIn: "20m"})
+            return res.status(200).json({ message: "Login Success" ,token})
 
         } catch (error) {
             return res.status(500).json({ Error: error })
@@ -84,7 +82,7 @@ export default new class userServices {
             const user = await this.UserRepository.findOne({
                 where: { id: loginSession.user.id }
             })
-            return res.status(200).json(user)
+            return res.status(200).json({message: "Authorized", user})
         } catch (error) {
             return res.status(500).json({ Error: error })
         }

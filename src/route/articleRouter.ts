@@ -6,8 +6,8 @@ import AuthMiddlewares from '../middleware/jwtAuth'
 const articleRoute = express.Router()
 articleRoute.get("/artikel", articleController.find)
 articleRoute.get("/artikel/:id", articleController.findOne)
-articleRoute.post("/artikel", AuthMiddlewares.Authentification ,UploadImage.single('image'),articleController.create)
-articleRoute.put("/artikel/:id", AuthMiddlewares.Authentification ,UploadImage.single('image'),articleController.update)
-articleRoute.delete("/artikel/:id", articleController.delete)
+articleRoute.post("/artikel", AuthMiddlewares.Authentification, UploadImage.single('image'),articleController.create)
+articleRoute.put("/artikel/:id", AuthMiddlewares.Authentification, UploadImage.single('image'),articleController.update)
+articleRoute.delete("/artikel/:id", AuthMiddlewares.Authentification, articleController.delete)
 
 export default articleRoute;

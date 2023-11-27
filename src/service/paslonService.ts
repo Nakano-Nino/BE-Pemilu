@@ -38,6 +38,7 @@ export default new class PaslonServices {
             const userId = parseInt(req.params.id)
 
             const fetchedData = await this.paslonRepository.findOne({ where: {id: userId}, relations: ['Partai']})
+
             return res.status(200).json(fetchedData)
         } catch (error) {
             return res.status(500).json({ Error: error })
@@ -46,9 +47,17 @@ export default new class PaslonServices {
 
     async create(req: Request, res: Response): Promise<Response> {
         try {
+            const role = res.locals.loginSession.user.role
+            
+            if(role == "user"){
+                res.status(403).json({ message: "Forbidden" })
+                return
+            }
+
             const data = req.body
             let uploaded = req.file.path
             let imageUrl: string = ''
+
 
             if(fs.existsSync(uploaded)){
                 let cloudinaryResponse = await cloudinary.uploader.upload(uploaded, {folder: "paslon"})
@@ -63,7 +72,7 @@ export default new class PaslonServices {
                 name: data.name,
                 orderNum: data.orderNum,
                 VissionMission: data.VissionMission,
-                image: imageUrl,
+                image: imageUrl
             })
             
             await this.paslonRepository.save(obj)
@@ -75,6 +84,13 @@ export default new class PaslonServices {
 
     async update(req: Request, res: Response): Promise<Response> {
         try {
+            const role = res.locals.loginSession.user.role
+            
+            if(role == "user"){
+                res.status(403).json({ message: "Forbidden" })
+                return
+            }
+
             const userId = req.params.id
             const data = req.body
             let uploaded = req.file.path
@@ -109,6 +125,13 @@ export default new class PaslonServices {
 
     async delete(req: Request, res: Response): Promise<Response> {
         try {
+            const role = res.locals.loginSession.user.role
+            
+            if(role == "user"){
+                res.status(403).json({ message: "Forbidden" })
+                return
+            }
+            
             const userId = req.params.id
 
             const fetchedData = await this.paslonRepository.findOneBy({ id: Number(userId) })

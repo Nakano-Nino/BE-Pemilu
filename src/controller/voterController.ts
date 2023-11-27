@@ -9,13 +9,4 @@ export default new (class VoterControllers {
     vote(req: Request, res: Response){
         voterService.vote(req, res);
     }
-    
-    // findOne(req: Request, res: Response){
-    //     voterService.findOne(req, res);
-    // }
-    
-    // count(req: Request, res: Response){
-    //     voterService.count(req, res);
-    // }
-    
 })();
